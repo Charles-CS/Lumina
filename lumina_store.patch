@@ -1,0 +1,127 @@
+diff --git a/Documents/My Projects/Lumina/src/store/useLuminaStore.ts b/Documents/My Projects/Lumina/src/store/useLuminaStore.ts
+index 3913f2e..7fe6514 100644
+--- a/Documents/My Projects/Lumina/src/store/useLuminaStore.ts
++++ b/Documents/My Projects/Lumina/src/store/useLuminaStore.ts
+@@ -130,6 +130,15 @@ export interface SectionVisuals {
+   [key: string]: unknown;
+ }
+
++
++export interface FreeformElement {
++  id: string;
++  type: string;
++  x: number;
++  y: number;
++  props: Record<string, any>;
++}
++
+ export interface LuminaSection {
+   id: string;
+   type: SectionType;
+@@ -140,6 +149,7 @@ export interface LuminaSection {
+     layout?: SectionLayout;
+     visuals?: SectionVisuals;
+     texts?: Record<string, string>;
++    elements?: FreeformElement[];
+     [key: string]: unknown;
+   };
+ }
+@@ -150,6 +160,7 @@ interface LuminaState {
+   selectedTextPath: { sectionId: string; textKey: string } | null;
+   zoomLevel: number;
+   isLivePreview: boolean;
++  globalCanvasBackgroundColor?: string;
+   setZoom: (level: number) => void;
+   setLivePreview: (v: boolean) => void;
+   addSection: (type: SectionType, payload?: Partial<SectionPayload>) => void;  
+@@ -163,6 +174,11 @@ interface LuminaState {
+   updateSection: (id: string, newProps: Partial<LuminaSection["props"]>) => void;
+   setSelectedId: (id: string | null) => void;
+   setSelectedTextPath: (path: { sectionId: string; textKey: string } | null) => void;
++  selectedFreeformElementId: string | null;
++  setSelectedFreeformElementId: (id: string | null) => void;
++  addFreeformElement: (sectionId: string, element: Omit<FreeformElement, "id">) => void;
++  updateFreeformElement: (sectionId: string, elementId: string, updates: Partial<Omit<FreeformElement, "id">>) => void;
++  removeFreeformElement: (sectionId: string, elementId: string) => void;       
+ }
+
+ function createSection(type: SectionType, payload?: Partial<SectionPayload>): LuminaSection {
+@@ -177,7 +193,7 @@ function createSection(type: SectionType, payload?: Partial<SectionPayload>): Lu
+       mode: sectionPayload.mode || mode,
+       title: sectionPayload.title || type,
+       subtitle: sectionPayload.subtitle || '',
+-      paddingY: 56,
++      paddingY: ((type as string) === 'HeroBlock' || nestedComponents[0]?.type === 'HeroBlock') ? 120 : ((type as string) === 'BlankPageBlock' ? 120 : 80),    
+       baseColor: '#a78bfa',
+       typography: sectionPayload.typography,
+       layout: sectionPayload.layout,
+@@ -230,6 +246,59 @@ export const useLuminaStore = create<LuminaState>((set) => ({
+   zoomLevel: 1,
+   isLivePreview: false,
+
++  selectedFreeformElementId: null,
++  setSelectedFreeformElementId: (id) => set({ selectedFreeformElementId: id }),
++
++  addFreeformElement: (sectionId, element) =>
++    set((state) => ({
++      sections: state.sections.map((section) => {
++        if (section.id !== sectionId) return section;
++        const newElements = section.props.elements || [];
++        return {
++          ...section,
++          props: {
++            ...section.props,
++            elements: [
++              ...newElements,
++              { ...element, id: `freeform-${crypto.randomUUID()}` },
++            ],
++          },
++        };
++      }),
++    })),
++
++  updateFreeformElement: (sectionId, elementId, updates) =>
++    set((state) => ({
++      sections: state.sections.map((section) => {
++        if (section.id !== sectionId) return section;
++        const existingElements = section.props.elements || [];
++        return {
++          ...section,
++          props: {
++            ...section.props,
++            elements: existingElements.map((el) =>
++              el.id === elementId ? { ...el, ...updates } : el
++            ),
++          },
++        };
++      }),
++    })),
++
++  removeFreeformElement: (sectionId, elementId) =>
++    set((state) => ({
++      sections: state.sections.map((section) => {
++        if (section.id !== sectionId) return section;
++        const existingElements = section.props.elements || [];
++        return {
++          ...section,
++          props: {
++            ...section.props,
++            elements: existingElements.filter((el) => el.id !== elementId),    
++          },
++        };
++      }),
++    })),
++
+   setZoom: (level) => set({ zoomLevel: level }),
+   setLivePreview: (v) => set({ isLivePreview: v }),
+
+@@ -375,3 +444,9 @@ export const useLuminaStore = create<LuminaState>((set) => ({
+   setSelectedId: (id) => set({ selectedId: id, selectedTextPath: null }),      
+   setSelectedTextPath: (path) => set({ selectedTextPath: path }),
+ }));
++
++
++
++
++
++
