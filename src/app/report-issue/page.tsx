@@ -69,11 +69,11 @@ export default function ReportIssuePage() {
                   id="browser"
                   className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20 transition-all appearance-none"
                 >
-                  <option value="chrome">Chrome</option>
-                  <option value="firefox">Firefox</option>
-                  <option value="safari">Safari</option>
-                  <option value="edge">Edge</option>
-                  <option value="other">Other</option>
+                  <option value="chrome" className="bg-white dark:bg-[#050505] text-black dark:text-white">Chrome</option>
+                  <option value="firefox" className="bg-white dark:bg-[#050505] text-black dark:text-white">Firefox</option>
+                  <option value="safari" className="bg-white dark:bg-[#050505] text-black dark:text-white">Safari</option>
+                  <option value="edge" className="bg-white dark:bg-[#050505] text-black dark:text-white">Edge</option>
+                  <option value="other" className="bg-white dark:bg-[#050505] text-black dark:text-white">Other</option>
                 </select>
               </div>
               <div>
@@ -82,11 +82,11 @@ export default function ReportIssuePage() {
                   id="os"
                   className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-black/20 dark:focus:ring-white/20 transition-all appearance-none"
                 >
-                  <option value="mac">macOS</option>
-                  <option value="windows">Windows</option>
-                  <option value="linux">Linux</option>
-                  <option value="ios">iOS</option>
-                  <option value="android">Android</option>
+                  <option value="mac" className="bg-white dark:bg-[#050505] text-black dark:text-white">macOS</option>
+                  <option value="windows" className="bg-white dark:bg-[#050505] text-black dark:text-white">Windows</option>
+                  <option value="linux" className="bg-white dark:bg-[#050505] text-black dark:text-white">Linux</option>
+                  <option value="ios" className="bg-white dark:bg-[#050505] text-black dark:text-white">iOS</option>
+                  <option value="android" className="bg-white dark:bg-[#050505] text-black dark:text-white">Android</option>
                 </select>
               </div>
             </div>
