@@ -56,7 +56,7 @@ export function Footer() {
               <Link href="/docs/mastering-lumina" className="hover:text-black dark:hover:text-white transition-colors">Master the Prompt</Link>
               <Link href="/roadmap" className="hover:text-black dark:hover:text-white transition-colors">Lumina Roadmap</Link>
               <Link href="/sponsor" className="hover:text-black dark:hover:text-white transition-colors">Support my Vision</Link>
-              <a href="https://discord.com/invite/lumina" target="_blank" rel="noopener noreferrer" className="hover:text-black dark:hover:text-white transition-colors">Join the Discord</a>
+              <a href="https://discord.gg/PaZVdZav" target="_blank" rel="noopener noreferrer" className="hover:text-black dark:hover:text-white transition-colors">Join the Discord</a>
               <Link href="/faq" className="hover:text-black dark:hover:text-white transition-colors">Why Lumina? (FAQ)</Link>
             </div>
 
