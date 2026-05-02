@@ -3,16 +3,16 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Building2, 
-  ShieldCheck, 
-  Users, 
-  Zap, 
-  Globe, 
-  ArrowRight, 
-  Check, 
-  MessageSquare, 
-  Mail, 
+import {
+  Building2,
+  ShieldCheck,
+  Users,
+  Zap,
+  Globe,
+  ArrowRight,
+  Check,
+  MessageSquare,
+  Mail,
   Phone,
   BarChart3,
   Lock,
@@ -65,7 +65,7 @@ export default function BusinessPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-[#0e0e12] via-[#0a0a0e] to-[#0c0c10]" />
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff04_1px,transparent_1px),linear-gradient(to_bottom,#ffffff04_1px,transparent_1px)] bg-[size:32px_32px]" />
       </div>
-      
+
       {/* Light Mode Background */}
       <div className={`fixed inset-0 pointer-events-none -z-10 transition-opacity duration-1000 ${!isDark ? 'opacity-100' : 'opacity-0'}`}>
         <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-slate-100" />
@@ -111,9 +111,9 @@ export default function BusinessPage() {
 
       <main className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
-          
+
           {/* Left Column: Value Proposition */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -153,7 +153,7 @@ export default function BusinessPage() {
           </motion.div>
 
           {/* Right Column: Contact Form */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
@@ -161,7 +161,7 @@ export default function BusinessPage() {
           >
             <div className="rounded-[40px] border border-black/10 dark:border-white/10 bg-white/50 dark:bg-[#0C0C0C] p-8 md:p-10 shadow-2xl relative overflow-hidden backdrop-blur-xl">
               <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-purple-500/10 blur-[100px] pointer-events-none" />
-              
+
               <div className="relative z-10">
                 <div className="mb-10 text-center md:text-left">
                   <h2 className="text-3xl font-bold mb-3 tracking-tight">Let's talk business.</h2>
@@ -170,7 +170,7 @@ export default function BusinessPage() {
 
                 <AnimatePresence mode="wait">
                   {!isSubmitted ? (
-                    <motion.form 
+                    <motion.form
                       key="form"
                       onSubmit={handleSubmit}
                       className="space-y-6"
@@ -179,24 +179,24 @@ export default function BusinessPage() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <label className="text-[10px] font-bold uppercase tracking-widest opacity-30 ml-1">Full Name</label>
-                          <input 
+                          <input
                             required
-                            type="text" 
+                            type="text"
                             className="w-full bg-black/[0.03] dark:bg-white/[0.03] border border-black/10 dark:border-white/10 rounded-2xl px-5 py-4 text-sm outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all"
                             placeholder="Alex Rivera"
                             value={formState.name}
-                            onChange={e => setFormState({...formState, name: e.target.value})}
+                            onChange={e => setFormState({ ...formState, name: e.target.value })}
                           />
                         </div>
                         <div className="space-y-2">
                           <label className="text-[10px] font-bold uppercase tracking-widest opacity-30 ml-1">Work Email</label>
-                          <input 
+                          <input
                             required
-                            type="email" 
+                            type="email"
                             className="w-full bg-black/[0.03] dark:bg-white/[0.03] border border-black/10 dark:border-white/10 rounded-2xl px-5 py-4 text-sm outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all"
                             placeholder="alex@company.com"
                             value={formState.email}
-                            onChange={e => setFormState({...formState, email: e.target.value})}
+                            onChange={e => setFormState({ ...formState, email: e.target.value })}
                           />
                         </div>
                       </div>
@@ -204,22 +204,22 @@ export default function BusinessPage() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <label className="text-[10px] font-bold uppercase tracking-widest opacity-30 ml-1">Company</label>
-                          <input 
+                          <input
                             required
-                            type="text" 
+                            type="text"
                             className="w-full bg-black/[0.03] dark:bg-white/[0.03] border border-black/10 dark:border-white/10 rounded-2xl px-5 py-4 text-sm outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all"
                             placeholder="Acme Inc."
                             value={formState.company}
-                            onChange={e => setFormState({...formState, company: e.target.value})}
+                            onChange={e => setFormState({ ...formState, company: e.target.value })}
                           />
                         </div>
                         <div className="space-y-2">
                           <label className="text-[10px] font-bold uppercase tracking-widest opacity-30 ml-1">Role</label>
-                          <select 
+                          <select
                             required
                             className="w-full bg-black/[0.03] dark:bg-[#121212] border border-black/10 dark:border-white/10 rounded-2xl px-5 py-4 text-sm outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all appearance-none"
                             value={formState.role}
-                            onChange={e => setFormState({...formState, role: e.target.value})}
+                            onChange={e => setFormState({ ...formState, role: e.target.value })}
                           >
                             <option value="" disabled>Select your role</option>
                             <option value="founder">Founder / CEO</option>
@@ -233,17 +233,17 @@ export default function BusinessPage() {
 
                       <div className="space-y-2">
                         <label className="text-[10px] font-bold uppercase tracking-widest opacity-30 ml-1">How can we help?</label>
-                        <textarea 
+                        <textarea
                           required
                           rows={4}
                           className="w-full bg-black/[0.03] dark:bg-white/[0.03] border border-black/10 dark:border-white/10 rounded-2xl px-5 py-4 text-sm outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/20 transition-all resize-none"
                           placeholder="Tell us about your team and project goals..."
                           value={formState.message}
-                          onChange={e => setFormState({...formState, message: e.target.value})}
+                          onChange={e => setFormState({ ...formState, message: e.target.value })}
                         />
                       </div>
 
-                      <button 
+                      <button
                         disabled={isSubmitting}
                         type="submit"
                         className="w-full py-4 bg-black dark:bg-white text-white dark:text-black rounded-2xl font-bold tracking-wide hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl flex items-center justify-center gap-2 disabled:opacity-50"
@@ -259,7 +259,7 @@ export default function BusinessPage() {
                       </button>
                     </motion.form>
                   ) : (
-                    <motion.div 
+                    <motion.div
                       key="success"
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -272,7 +272,7 @@ export default function BusinessPage() {
                         <h3 className="text-2xl font-bold mb-2">Message Sent!</h3>
                         <p className="opacity-50 max-w-[280px]">Thanks for reaching out, {formState.name.split(' ')[0]}. Our team will be in touch shortly.</p>
                       </div>
-                      <button 
+                      <button
                         onClick={() => setIsSubmitted(false)}
                         className="text-sm font-bold text-purple-500 hover:text-purple-400 transition-colors"
                       >
@@ -329,10 +329,10 @@ export default function BusinessPage() {
 
 function BusinessFaqItem({ faq }: { faq: { q: string, a: string } }) {
   const [isOpen, setIsOpen] = useState(true);
-  
+
   return (
     <div className="flex flex-col gap-4">
-      <button 
+      <button
         onClick={() => setIsOpen(!isOpen)}
         className="text-xl font-bold flex items-center gap-3 text-left w-full group"
       >

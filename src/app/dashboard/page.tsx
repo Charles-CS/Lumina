@@ -489,36 +489,17 @@ function SectionCard({
     <div
       ref={setSortableRef}
       data-section-card="true"
-      onClick={isLivePreview ? undefined : (e) => { e.stopPropagation(); onSelect(); }}
       style={{
         ...sortableStyle,
         opacity: isDragging ? 0.35 : 1,
-        backgroundColor:
-          effectiveCanvasBackgroundColor !== 'transparent'
-            ? effectiveCanvasBackgroundColor
-            : undefined,
-        backgroundImage:
-          !hasGlobalCanvasBackground && backgroundType === 'gradient' && effectiveCanvasBackgroundColor !== 'transparent'
-            ? `linear-gradient(135deg, ${effectiveCanvasBackgroundColor} 0%, #000 100%)`
-            : undefined,
       }}
-      className={`relative w-full text-left overflow-hidden
-        ${isLivePreview ? "rounded-none cursor-default" : "rounded-none border-y border-[rgba(255,255,255,0.05)] hover:border-[rgba(255,255,255,0.15)] bg-white/[0.01] hover:bg-white/[0.03] transition-all cursor-pointer"}
-        ${isSelected && !isLivePreview
-          ? "ring-1 ring-accent-glow border-accent-glow shadow-[0_0_20px_rgba(167,139,250,0.1)]"
-          : ""
-        }
-        ${isOver ? "border-dashed border-accent-glow ring-1 ring-accent-glow bg-accent-glow/5" : ""}
-        ${isDragOverlay ? "shadow-[0_24px_64px_rgba(0,0,0,0.7)] ring-1 ring-accent-glow/40" : ""}
-      `}
+      className={`relative w-full flex flex-col group ${isLivePreview ? "" : "mb-8"}`}
     >
-
-
-      {/* ── Section header bar ── */}
+      {/* ── Section header bar (Now floating outside the section) ── */}
       {!isLivePreview && (
         <div
-          className="absolute top-0 left-0 right-0 z-40 flex items-center justify-between px-4 py-2 border-b border-white/5 bg-black/40 backdrop-blur-sm pointer-events-auto no-sidebar-trigger"
-          onClick={(e) => e.stopPropagation()}
+          className="flex items-center justify-between px-4 py-2 border-t border-x border-white/5 bg-[#0a0a0a] rounded-t-[12px] z-40 pointer-events-auto transition-opacity shadow-xl"
+          onClick={(e) => { e.stopPropagation(); onSelect(); }}
         >
           <div className="flex items-center gap-2">
             {/* ── Drag handle ── */}
@@ -550,25 +531,48 @@ function SectionCard({
         </div>
       )}
 
-      {/* ── Section content ── */}
-      <div ref={setDropRef} className="relative z-10">
-        <SectionRenderer section={section} readOnly={isLivePreview} />
-        {dragPreview && dragPreview.sectionId === section.id && (
-          <div
-            className="absolute pointer-events-none z-30"
-            style={{ left: dragPreview.x, top: dragPreview.y }}
-          >
-            <div className="opacity-80 rounded-md ring-2 ring-violet-400/60 ring-offset-1 ring-offset-[#090909]">
-              <DraggingComponentGhost type={dragPreview.type} />
+      {/* ── Section content wrapper ── */}
+      <div
+        onClick={isLivePreview ? undefined : (e) => { e.stopPropagation(); onSelect(); }}
+        style={{
+          backgroundColor:
+            effectiveCanvasBackgroundColor !== 'transparent'
+              ? effectiveCanvasBackgroundColor
+              : undefined,
+          backgroundImage:
+            !hasGlobalCanvasBackground && backgroundType === 'gradient' && effectiveCanvasBackgroundColor !== 'transparent'
+              ? `linear-gradient(135deg, ${effectiveCanvasBackgroundColor} 0%, #000 100%)`
+              : undefined,
+        }}
+        className={`relative w-full text-left overflow-hidden
+          ${isLivePreview ? "rounded-none cursor-default" : "rounded-b-[12px] border border-[rgba(255,255,255,0.05)] hover:border-[rgba(255,255,255,0.15)] bg-white/[0.01] hover:bg-white/[0.03] transition-all cursor-pointer"}
+          ${isSelected && !isLivePreview
+            ? "ring-1 ring-accent-glow border-accent-glow shadow-[0_0_20px_rgba(167,139,250,0.1)]"
+            : ""
+          }
+          ${isOver ? "border-dashed border-accent-glow ring-1 ring-accent-glow bg-accent-glow/5" : ""}
+          ${isDragOverlay ? "shadow-[0_24px_64px_rgba(0,0,0,0.7)] ring-1 ring-accent-glow/40" : ""}
+        `}
+      >
+        <div ref={setDropRef} className="relative z-10">
+          <SectionRenderer section={section} readOnly={isLivePreview} />
+          {dragPreview && dragPreview.sectionId === section.id && (
+            <div
+              className="absolute pointer-events-none z-30"
+              style={{ left: dragPreview.x, top: dragPreview.y }}
+            >
+              <div className="opacity-80 rounded-md ring-2 ring-violet-400/60 ring-offset-1 ring-offset-[#090909]">
+                <DraggingComponentGhost type={dragPreview.type} />
+              </div>
             </div>
-          </div>
+          )}
+        </div>
+
+        {/* ── Selection violet border overlay ── */}
+        {isSelected && !isLivePreview && (
+          <div className="absolute inset-0 border border-violet-500/30 rounded-b-[12px] pointer-events-none" />
         )}
       </div>
-
-      {/* ── Selection violet border overlay ── */}
-      {isSelected && !isLivePreview && (
-        <div className="absolute inset-0 border border-violet-500/30 rounded-[20px] pointer-events-none" />
-      )}
     </div>
   );
 }

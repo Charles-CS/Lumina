@@ -35,6 +35,7 @@ interface FreeformOverlayProps {
   defaultPaddingY?: number;
   className?: string;
   readOnly?: boolean;
+  splitFlow?: "above" | "below";
 }
 
 type FreeformClipboardItem = {
@@ -75,6 +76,7 @@ export function FreeformOverlay({
   defaultPaddingY,
   className,
   readOnly = false,
+  splitFlow,
 }: FreeformOverlayProps) {
   const { selectedId, setSelectedId, updateFreeformElement, addFreeformElement, removeFreeformElement, isLivePreview, viewMode } = useLuminaStore();
   const effectiveReadOnly = readOnly || isLivePreview;
@@ -177,7 +179,7 @@ export function FreeformOverlay({
     const size = measured ?? getElementSize(elementId);
     if (!size) return { x, y };
 
-    const maxX = Math.max(0, overlayEl.clientWidth - size.width);
+    const maxX = Math.max(0, 1440 - size.width);
     const maxY = Math.max(0, overlayEl.clientHeight - size.height);
 
     return {
@@ -229,12 +231,13 @@ export function FreeformOverlay({
     const overlayRect = overlayRef.current?.getBoundingClientRect();
     if (!overlayRect) return;
 
-    const pasteX = e.clientX - overlayRect.left;
+    const coordinateScale = 1440 / overlayRect.width;
+    const pasteX = (e.clientX - overlayRect.left) * coordinateScale;
     const pasteY = e.clientY - overlayRect.top;
     const menuWidth = 140;
     const menuHeight = freeformClipboard ? 110 : 56;
-    const nextX = Math.min(Math.max(pasteX + 8, 8), overlayRect.width - menuWidth - 8);
-    const nextY = Math.min(Math.max(pasteY + 8, 8), overlayRect.height - menuHeight - 8);
+    const nextX = Math.min(Math.max(e.clientX - overlayRect.left + 8, 8), overlayRect.width - menuWidth - 8);
+    const nextY = Math.min(Math.max(e.clientY - overlayRect.top + 8, 8), overlayRect.height - menuHeight - 8);
 
     setContextMenu({
       x: nextX,
@@ -248,8 +251,11 @@ export function FreeformOverlay({
   useEffect(() => {
     const handlePointerMove = (e: PointerEvent) => {
       if (!dragState) return;
+      const overlayEl = overlayRef.current;
+      if (!overlayEl) return;
       const scale = (window as any).__lumina_canvas_scale || 1;
-      const dx = (e.clientX - dragState.startX) / scale;
+      const coordinateScale = 1440 / overlayEl.clientWidth;
+      const dx = ((e.clientX - dragState.startX) / scale) * coordinateScale;
       const dy = (e.clientY - dragState.startY) / scale;
       const next = clampToOverlay(
         dragState.id,
@@ -283,30 +289,32 @@ export function FreeformOverlay({
       if (!overlayEl) return;
 
       const scale = (window as any).__lumina_canvas_scale || 1;
-      const dx = (e.clientX - resizeState.startX) / scale;
-      const dy = (e.clientY - resizeState.startY) / scale;
+      const coordinateScale = 1440 / overlayEl.clientWidth;
+      const dxDisplay = (e.clientX - resizeState.startX) / scale;
+      const dyDisplay = (e.clientY - resizeState.startY) / scale;
+      const dxVirtual = dxDisplay * coordinateScale;
 
       let nextX = resizeState.initialX;
       let nextY = resizeState.initialY;
       let nextWidth = resizeState.initialWidth;
       let nextHeight = resizeState.initialHeight;
 
-      if (resizeState.edge.includes("e")) nextWidth = resizeState.initialWidth + dx;
-      if (resizeState.edge.includes("s")) nextHeight = resizeState.initialHeight + dy;
+      if (resizeState.edge.includes("e")) nextWidth = resizeState.initialWidth + dxDisplay;
+      if (resizeState.edge.includes("s")) nextHeight = resizeState.initialHeight + dyDisplay;
       if (resizeState.edge.includes("w")) {
-        nextWidth = resizeState.initialWidth - dx;
-        nextX = resizeState.initialX + dx;
+        nextWidth = resizeState.initialWidth - dxDisplay;
+        nextX = resizeState.initialX + dxVirtual;
       }
       if (resizeState.edge.includes("n")) {
-        nextHeight = resizeState.initialHeight - dy;
-        nextY = resizeState.initialY + dy;
+        nextHeight = resizeState.initialHeight - dyDisplay;
+        nextY = resizeState.initialY + dyDisplay;
       }
 
       const minSize = 24;
 
       if (nextWidth < minSize) {
         if (resizeState.edge.includes("w")) {
-          nextX = resizeState.initialX + (resizeState.initialWidth - minSize);
+          nextX = resizeState.initialX + (resizeState.initialWidth - minSize) * coordinateScale;
         }
         nextWidth = minSize;
       }
@@ -320,7 +328,7 @@ export function FreeformOverlay({
 
       if (nextX < 0) {
         if (resizeState.edge.includes("w")) {
-          nextWidth += nextX;
+          nextWidth += (nextX / coordinateScale);
         }
         nextX = 0;
       }
@@ -332,11 +340,11 @@ export function FreeformOverlay({
         nextY = 0;
       }
 
-      if (nextX + nextWidth > overlayEl.clientWidth) {
+      if (nextX + (nextWidth * coordinateScale) > 1440) {
         if (resizeState.edge.includes("e")) {
-          nextWidth = overlayEl.clientWidth - nextX;
+          nextWidth = (1440 - nextX) / coordinateScale;
         } else {
-          nextX = overlayEl.clientWidth - nextWidth;
+          nextX = 1440 - (nextWidth * coordinateScale);
         }
       }
 
@@ -692,7 +700,7 @@ export function FreeformOverlay({
       case "Menu": return { width: 220, height: 160 };
       case "Timeline": return { width: 240, height: 120 };
       case "DialGauge": return { width: 200, height: 200 };
-      case "WeatherWidget": return { width: 220, height: 220 };
+      case "WeatherWidget": return { width: 220, height: 160 };
       case "WebGLBackground": return { width: 400, height: 300 };
       case "BokehGradient": return { width: 400, height: 300 };
       case "CatalogMenu": return { width: 340, height: 160 };
@@ -721,67 +729,73 @@ export function FreeformOverlay({
     { edge: "sw", cursor: "nesw-resize", className: "left-0 bottom-0 -translate-x-1/2 translate-y-1/2" },
   ];
 
-  // ── Mobile / Tablet: flow layout — elements stack centered below block content ──
+  // Mobile/tablet back-layer: skip (decorative only)
+  if (viewMode !== "desktop" && layer === "back") return null;
+
+  // Desktop front layer deduplication
+  if (viewMode === "desktop" && splitFlow === "below") return null;
+
+  // ── Mobile / Tablet: Flow layout interleaving elements with block content ──
   if (viewMode !== "desktop" && layer !== "back") {
-    // Sort by y so vertical order is preserved from the desktop layout
     const sorted = [...visibleElements].sort((a, b) => a.y - b.y);
-    if (sorted.length === 0) return null;
+
+    // Determine which elements to render based on splitFlow
+    let flowElements = sorted;
+    if (splitFlow === "above") {
+      flowElements = sorted.filter(el => el.y < 250);
+    } else if (splitFlow === "below") {
+      flowElements = sorted.filter(el => el.y >= 250);
+    }
+
+    if (flowElements.length === 0) return null;
 
     return (
       <div
         ref={overlayRef}
-        className={`freeform-overlay relative w-full pointer-events-none ${className || ""}`}
+        className={`freeform-overlay relative w-full flex flex-col items-center z-20 ${className || ""}`}
+        style={{ gap: sectionLayout?.gap ? `${sectionLayout.gap}px` : "1.5rem", padding: splitFlow === "above" ? "2rem 1rem 0" : "0 1rem 2rem" }}
       >
-        <div className="flex flex-col items-center gap-4 py-4 px-4 w-full">
-          {sorted.map((element) => {
-            const isSelected = !effectiveReadOnly && selectedId === element.id;
-            const isNavbar = element.type === "Navbar";
-            const p = element.props || {};
+        {flowElements.map((element) => {
+          const isSelected = !effectiveReadOnly && selectedId === element.id;
+          const isNavbar = element.type === "Navbar";
+          const p = element.props || {};
 
-            const contentStyle: React.CSSProperties = (() => {
-              if (isNavbar) {
-                // Explicit height so h-full inside the Navbar div works;
-                // position:relative + overflow:visible let the hamburger dropdown escape
-                const h = Number(p.height ?? 64);
-                return { width: "100%", height: h, minHeight: 48, maxWidth: "100%", position: "relative", overflow: "visible" } as React.CSSProperties;
-              }
-              if (element.type === "Image" && !p.width) return { width: "100%", aspectRatio: "16/9", height: "auto" } as React.CSSProperties;
-              const INTRINSIC = new Set(["Text", "Badge", "Checkbox"]);
-              if (!INTRINSIC.has(element.type)) {
-                const { width, height } = getRenderableSize(element);
-                // Shrink wide components to fit the narrow canvas
-                const maxW = viewMode === "mobile" ? 340 : 600;
-                const w = typeof width === "number" ? Math.min(width, maxW) : width;
-                return { width: w, minHeight: height, height: "auto", maxWidth: "100%" } as React.CSSProperties;
-              }
-              return { maxWidth: "100%" } as React.CSSProperties;
-            })();
+          const contentStyle: React.CSSProperties = (() => {
+            if (isNavbar) {
+              const h = Number(p.height ?? 64);
+              return { width: "100%", height: h, minHeight: 48, maxWidth: "100%", position: "relative", overflow: "visible" } as React.CSSProperties;
+            }
+            if (element.type === "Image" && !p.width) return { width: "100%", aspectRatio: "16/9", height: "auto" } as React.CSSProperties;
+            const INTRINSIC = new Set(["Text", "Badge", "Checkbox"]);
+            if (!INTRINSIC.has(element.type)) {
+              const { width, height } = getRenderableSize(element);
+              const maxW = viewMode === "mobile" ? 340 : 600;
+              const w = typeof width === "number" ? Math.min(width, maxW) : width;
+              return { width: w, minHeight: height, height: p.height ? height : "auto", maxWidth: "100%" } as React.CSSProperties;
+            }
+            return { maxWidth: "100%" } as React.CSSProperties;
+          })();
 
-            return (
-              <div
-                key={element.id}
-                data-freeform-id={element.id}
-                className={`pointer-events-auto w-full flex ${isNavbar ? "" : "justify-center"
-                  } ${!effectiveReadOnly && isSelected ? "ring-2 ring-violet-500/80 rounded-sm" : ""
-                  }`}
-                onPointerDown={effectiveReadOnly ? undefined : (e) => {
-                  e.stopPropagation();
-                  setSelectedId(element.id);
-                }}
-                onClick={effectiveReadOnly ? undefined : (e) => e.stopPropagation()}
-              >
-                <div data-freeform-content="true" className="select-none" style={contentStyle}>
-                  {renderComponent(element)}
-                </div>
+          return (
+            <div
+              key={element.id}
+              data-freeform-id={element.id}
+              className={`pointer-events-auto w-full flex ${isNavbar ? "" : "justify-center"} ${!effectiveReadOnly && isSelected ? "ring-2 ring-violet-500/80 rounded-sm" : ""}`}
+              onPointerDown={effectiveReadOnly ? undefined : (e) => {
+                e.stopPropagation();
+                setSelectedId(element.id);
+              }}
+              onClick={effectiveReadOnly ? undefined : (e) => e.stopPropagation()}
+            >
+              <div data-freeform-content="true" className="select-none flex flex-col" style={contentStyle}>
+                {renderComponent(element)}
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
       </div>
     );
   }
-  // Mobile/tablet back-layer: skip (decorative only)
-  if (viewMode !== "desktop" && layer === "back") return null;
 
   return (
     <div
@@ -812,11 +826,11 @@ export function FreeformOverlay({
               maxHeight: "100%",
               cursor: effectiveReadOnly ? "default" : (dragState?.id === element.id ? "grabbing" : "grab"),
             } : {
-              // Desktop: original free placement
-              left: `max(16px, min(${element.x + frameOffsetX}px, calc(100% - ${width}px - 16px)))`,
+              // Proportional left placement, maintaining correct alignment on mobile
+              left: `clamp(0px, ${(element.x + frameOffsetX) / 1440 * 100}%, max(0px, calc(100% - ${width}px)))`,
               top: element.y + frameOffsetY,
               width, height,
-              maxWidth: "calc(100% - 32px)",
+              maxWidth: "100%",
               maxHeight: "100%",
               cursor: effectiveReadOnly ? "default" : (dragState?.id === element.id ? "grabbing" : "grab"),
             }}
@@ -927,21 +941,22 @@ export function FreeformOverlay({
               width: "100%",
               cursor: effectiveReadOnly ? "default" : (dragState?.id === element.id ? "grabbing" : "grab"),
             } : {
-              // Desktop: original free placement
-              left: `max(16px, min(${element.x + frameOffsetX}px, calc(100% - ${getRenderableSize(element).width}px - 16px)))`,
+              // Proportional left placement, maintaining correct alignment on mobile
+              left: `clamp(0px, ${(element.x + frameOffsetX) / 1440 * 100}%, max(0px, calc(100% - ${getRenderableSize(element).width}px)))`,
               top: element.y + frameOffsetY,
-              maxWidth: "calc(100% - 32px)",
+              maxWidth: "100%",
               cursor: effectiveReadOnly ? "default" : (dragState?.id === element.id ? "grabbing" : "grab"),
             }}
           >
             <div
               data-freeform-content="true"
-              className={`select-none transition-opacity duration-150 ${dragState?.id === element.id ? "opacity-70" : "opacity-100"}`}
+              className={`select-none transition-opacity duration-150 flex flex-col ${dragState?.id === element.id ? "opacity-70" : "opacity-100"}`}
               style={(() => {
                 const p = element.props || {};
                 // Navbar is always full-width
                 if (element.type === "Navbar") {
-                  return { width: "100%", height: "auto", minHeight: 64, maxWidth: "100%" } as React.CSSProperties;
+                  const h = p.height !== undefined ? Number(p.height) : 64;
+                  return { width: "100%", height: h, minHeight: 64, maxWidth: "100%" } as React.CSSProperties;
                 }
                 // Smart Fit: full-width images on mobile when no explicit width set
                 if (element.type === "Image" && viewMode === "mobile" && !p.width) {

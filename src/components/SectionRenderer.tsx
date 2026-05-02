@@ -6,15 +6,16 @@ import { useSectionRenderer } from "@/hooks/useSectionRenderer";
 import { ResponsiveShell } from "./ResponsiveShell";
 
 export function SectionRenderer({ section, customGlobalStyles, readOnly = false }: { section: LuminaSection; customGlobalStyles?: any; readOnly?: boolean }) {
-  const { blockNode, stylesNode, overlayBack, overlayFront, backgroundNoiseNode, containerProps } = useSectionRenderer({ section, customGlobalStyles, readOnly });
+  const { blockNode, stylesNode, overlayBack, overlayFrontAbove, overlayFrontBelow, backgroundNoiseNode, containerProps } = useSectionRenderer({ section, customGlobalStyles, readOnly });
 
   const inner = (
     <div {...containerProps}>
       {backgroundNoiseNode}
       {stylesNode}
       {overlayBack}
+      {overlayFrontAbove}
       {blockNode}
-      {overlayFront}
+      {overlayFrontBelow}
     </div>
   );
 

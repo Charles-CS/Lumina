@@ -68,6 +68,59 @@ export default function LoginPage() {
     }, 1000);
   };
 
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+
+  const PolicyModal = ({ isOpen, onClose, title, children }: { isOpen: boolean, onClose: () => void, title: string, children: React.ReactNode }) => (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-md p-4 sm:p-6"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+            className="bg-section-bg border border-black/10 dark:border-white/10 p-6 sm:p-8 rounded-3xl w-full max-w-2xl shadow-2xl relative overflow-hidden flex flex-col max-h-[85vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6 shrink-0">
+              <h2 className="text-xl font-bold tracking-tight">{title}</h2>
+              <button
+                onClick={onClose}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="overflow-y-auto pr-2 custom-scrollbar text-sm text-black/70 dark:text-white/70 leading-relaxed space-y-6">
+              {children}
+            </div>
+
+            {/* Footer */}
+            <div className="mt-8 pt-6 border-t border-black/5 dark:border-white/5 shrink-0 flex justify-end">
+              <button
+                onClick={onClose}
+                className="px-6 py-2.5 bg-black dark:bg-white text-white dark:text-black rounded-xl text-sm font-semibold hover:opacity-90 transition-opacity shadow-lg shadow-black/10 dark:shadow-white/5"
+              >
+                Close
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+
   return (
     <>
       <div className="h-screen overflow-hidden bg-page-bg text-foreground flex items-center justify-center p-4 relative w-full transition-colors duration-300">
@@ -387,9 +440,19 @@ export default function LoginPage() {
                 {tab !== "forgot" && (
                   <>
                     By {tab === "signin" ? "signing in" : "signing up"}, you agree to our{" "}
-                    <Link href="#" className="underline hover:text-black dark:hover:text-white transition-colors decoration-black/20 dark:decoration-white/20 underline-offset-2">Terms of Service</Link>
+                    <button
+                      onClick={() => setShowTermsModal(true)}
+                      className="underline hover:text-black dark:hover:text-white transition-colors decoration-black/20 dark:decoration-white/20 underline-offset-2"
+                    >
+                      Terms of Service
+                    </button>
                     {" "}and{" "}
-                    <Link href="#" className="underline hover:text-black dark:hover:text-white transition-colors decoration-black/20 dark:decoration-white/20 underline-offset-2">Privacy Policy</Link>.
+                    <button
+                      onClick={() => setShowPrivacyModal(true)}
+                      className="underline hover:text-black dark:hover:text-white transition-colors decoration-black/20 dark:decoration-white/20 underline-offset-2"
+                    >
+                      Privacy Policy
+                    </button>.
                   </>
                 )}
               </motion.span>
@@ -398,6 +461,70 @@ export default function LoginPage() {
 
         </div>
       </div>
+
+      {/* Terms of Service Modal */}
+      <PolicyModal
+        isOpen={showTermsModal}
+        onClose={() => setShowTermsModal(false)}
+        title="Terms of Service"
+      >
+        <section>
+          <h3 className="text-black dark:text-white font-semibold mb-2">1. Acceptance of Terms</h3>
+          <p>By accessing and using Lumina, you agree to be bound by these Terms of Service and all applicable laws and regulations.</p>
+        </section>
+        <section>
+          <h3 className="text-black dark:text-white font-semibold mb-2">2. Use License</h3>
+          <p>Permission is granted to temporarily use Lumina for personal or commercial website creation. This is the grant of a license, not a transfer of title.</p>
+        </section>
+        <section>
+          <h3 className="text-black dark:text-white font-semibold mb-2">3. User Accounts</h3>
+          <p>You are responsible for maintaining the confidentiality of your account and password. You agree to accept responsibility for all activities that occur under your account.</p>
+        </section>
+        <section>
+          <h3 className="text-black dark:text-white font-semibold mb-2">4. Content Ownership</h3>
+          <p>You retain all rights to the content you create and upload to Lumina. Lumina does not claim ownership of your intellectual property.</p>
+        </section>
+        <section>
+          <h3 className="text-black dark:text-white font-semibold mb-2">5. Prohibited Activities</h3>
+          <p>Users are prohibited from using Lumina for any unlawful purposes, infringing on intellectual property rights, or attempting to compromise the security of the platform.</p>
+        </section>
+        <section>
+          <h3 className="text-black dark:text-white font-semibold mb-2">6. Limitation of Liability</h3>
+          <p>Lumina shall not be liable for any damages arising out of the use or inability to use the platform, even if Lumina has been notified of the possibility of such damage.</p>
+        </section>
+      </PolicyModal>
+
+      {/* Privacy Policy Modal */}
+      <PolicyModal
+        isOpen={showPrivacyModal}
+        onClose={() => setShowPrivacyModal(false)}
+        title="Privacy Policy"
+      >
+        <section>
+          <h3 className="text-black dark:text-white font-semibold mb-2">1. Information We Collect</h3>
+          <p>We collect information you provide directly to us, such as when you create an account, update your profile, or use our website building tools.</p>
+        </section>
+        <section>
+          <h3 className="text-black dark:text-white font-semibold mb-2">2. How We Use Information</h3>
+          <p>We use the information we collect to provide, maintain, and improve our services, and to communicate with you about updates and new features.</p>
+        </section>
+        <section>
+          <h3 className="text-black dark:text-white font-semibold mb-2">3. Data Security</h3>
+          <p>We implement appropriate technical and organizational measures to protect your personal data against unauthorized or unlawful processing and against accidental loss, destruction, or damage.</p>
+        </section>
+        <section>
+          <h3 className="text-black dark:text-white font-semibold mb-2">4. Cookies</h3>
+          <p>We use cookies and similar tracking technologies to analyze how users interact with Lumina and to personalize your experience.</p>
+        </section>
+        <section>
+          <h3 className="text-black dark:text-white font-semibold mb-2">5. Third-Party Services</h3>
+          <p>Lumina may use third-party service providers, such as Supabase for authentication and database management. These providers have access to your information only to perform specific tasks on our behalf.</p>
+        </section>
+        <section>
+          <h3 className="text-black dark:text-white font-semibold mb-2">6. Changes to Policy</h3>
+          <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.</p>
+        </section>
+      </PolicyModal>
 
       {/* Success Modal for Signup */}
       <AnimatePresence>

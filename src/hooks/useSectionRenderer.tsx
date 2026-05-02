@@ -322,17 +322,34 @@ export function useSectionRenderer({ section, customGlobalStyles, readOnly = fal
     />
   );
 
-  const overlayFront = (
+  const overlayFrontAbove = (
     <FreeformOverlay
       sectionId={section.id}
       elements={freeformElements}
       layer="front"
+      splitFlow="above"
       captureContextMenu={!readOnly}
       sectionTypography={typography}
       sectionLayout={layout}
       sectionPaddingY={paddingY !== undefined ? paddingY : defaultPaddingY}
       defaultPaddingY={defaultPaddingY}
-      className="z-20"
+      className="z-20 w-full"
+      readOnly={readOnly}
+    />
+  );
+
+  const overlayFrontBelow = (
+    <FreeformOverlay
+      sectionId={section.id}
+      elements={freeformElements}
+      layer="front"
+      splitFlow="below"
+      captureContextMenu={!readOnly}
+      sectionTypography={typography}
+      sectionLayout={layout}
+      sectionPaddingY={paddingY !== undefined ? paddingY : defaultPaddingY}
+      defaultPaddingY={defaultPaddingY}
+      className="z-20 w-full"
       readOnly={readOnly}
     />
   );
@@ -345,7 +362,8 @@ export function useSectionRenderer({ section, customGlobalStyles, readOnly = fal
     blockNode: renderBlock(),
     stylesNode: <style>{styleString}</style>,
     overlayBack,
-    overlayFront,
+    overlayFrontAbove,
+    overlayFrontBelow,
     backgroundNoiseNode,
     containerProps: {
       id: `section-${section.id}`,

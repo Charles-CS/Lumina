@@ -284,8 +284,8 @@ export default function AssetsPage() {
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
                     className={`whitespace-nowrap px-3 py-1 rounded-full text-[11px] font-medium transition-all ${activeCategory === cat
-                        ? "bg-black/5 dark:bg-white/10 text-black dark:text-white border border-transparent"
-                        : "bg-transparent border border-black/10 dark:border-white/[0.06] text-black/60 dark:text-white/50 hover:text-black/90 dark:hover:text-white/80 hover:bg-black/5 dark:hover:bg-white/5"
+                      ? "bg-black/5 dark:bg-white/10 text-black dark:text-white border border-transparent"
+                      : "bg-transparent border border-black/10 dark:border-white/[0.06] text-black/60 dark:text-white/50 hover:text-black/90 dark:hover:text-white/80 hover:bg-black/5 dark:hover:bg-white/5"
                       }`}
                   >
                     {cat}
@@ -384,8 +384,8 @@ export default function AssetsPage() {
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
                       className={`w-9 h-9 rounded-xl text-xs font-bold transition-all ${currentPage === page
-                          ? "bg-black dark:bg-white text-white dark:text-black shadow-lg"
-                          : "hover:bg-black/5 dark:hover:bg-white/5 text-black/40 dark:text-white/40"
+                        ? "bg-black dark:bg-white text-white dark:text-black shadow-lg"
+                        : "hover:bg-black/5 dark:hover:bg-white/5 text-black/40 dark:text-white/40"
                         }`}
                     >
                       {page}
