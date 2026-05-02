@@ -52,10 +52,10 @@ export function Footer() {
             {/* RESOURCES */}
             <div className="flex flex-col gap-4 text-[13px]">
               <h4 className="text-[11px] font-semibold tracking-wider text-black/30 dark:text-white/30 uppercase mb-1">Resources</h4>
-              <Link href="/docs/pro-tips" className="hover:text-black dark:hover:text-white transition-colors">Pro Tips & Tricks</Link>
-              <Link href="/docs/mastering-lumina" className="hover:text-black dark:hover:text-white transition-colors">Master the Prompt</Link>
+              <Link href="/best-practices" className="hover:text-black dark:hover:text-white transition-colors">Lumina Best Practices</Link>
+              <Link href="/design-guide" className="hover:text-black dark:hover:text-white transition-colors">Lumina Design Guide</Link>
               <Link href="/roadmap" className="hover:text-black dark:hover:text-white transition-colors">Lumina Roadmap</Link>
-              <Link href="/sponsor" className="hover:text-black dark:hover:text-white transition-colors">Support my Vision</Link>
+              <Link href="/support-my-vision" className="hover:text-black dark:hover:text-white transition-colors">Support my Vision</Link>
               <a href="https://discord.gg/PaZVdZav" target="_blank" rel="noopener noreferrer" className="hover:text-black dark:hover:text-white transition-colors">Join the Discord</a>
               <Link href="/faq" className="hover:text-black dark:hover:text-white transition-colors">Why Lumina? (FAQ)</Link>
             </div>
