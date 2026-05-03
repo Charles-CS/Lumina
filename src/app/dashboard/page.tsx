@@ -641,7 +641,7 @@ export default function Dashboard() {
   const [dragPreview, setDragPreview] = useState<DragPreview | null>(null);
   const [pointerPos, setPointerPos] = useState<{ x: number; y: number } | null>(null);
   const [isSectionsOpen, setIsSectionsOpen] = useState(false);
-  const [isGlobalsOpen, setIsGlobalsOpen] = useState(false);
+  const [isGlobalsOpen, setIsGlobalsOpen] = useState(true);
 
   // Left Sidebar state
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
