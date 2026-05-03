@@ -49,7 +49,7 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-black/[0.06] bg-white/80 dark:border-white/[0.06] dark:bg-[#050505]/80 backdrop-blur-xl transition-colors duration-300">
-      <div className="mx-auto flex h-16 w-full max-w-[1440px] items-center justify-between px-6 md:px-12 relative">
+      <div className="mx-auto flex h-16 w-full max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-12 relative">
 
         {/* Logo */}
         <Link href="/" className="flex items-center group relative z-50">
@@ -59,7 +59,7 @@ export function Navbar() {
         </Link>
 
         {/* Desktop Nav Links */}
-        <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-6 text-[11px] font-medium uppercase tracking-widest">
+        <nav className="hidden xl:flex absolute left-1/2 -translate-x-1/2 items-center gap-5 text-[11px] font-medium uppercase tracking-widest">
           {navLinks.map((link) => (
             <Link
               key={link.path}
@@ -74,7 +74,7 @@ export function Navbar() {
         {/* Right Actions */}
         <div className="flex items-center gap-2 relative z-50">
           {/* Theme toggle */}
-          <div className="hidden sm:flex items-center gap-0.5 rounded-full border border-black/[0.08] bg-black/[0.03] dark:border-white/[0.05] dark:bg-white/[0.02] p-0.5 shadow-inner">
+          <div className="hidden xl:flex items-center gap-0.5 rounded-full border border-black/[0.08] bg-black/[0.03] dark:border-white/[0.05] dark:bg-white/[0.02] p-0.5 shadow-inner">
             <button
               onClick={() => setTheme("light")}
               aria-label="Light mode"
@@ -111,7 +111,7 @@ export function Navbar() {
           {user ? (
             <Link 
               href="/profile" 
-              className="hidden sm:flex items-center gap-2 px-2.5 py-1 text-[11px] font-medium text-black/70 dark:text-white/80 rounded-full border border-black/10 dark:border-white/10 bg-black/[0.03] dark:bg-white/[0.03] hover:bg-black/[0.06] dark:hover:bg-white/[0.06] transition-all duration-300 max-w-[200px] cursor-pointer"
+              className="hidden xl:flex items-center gap-2 px-2.5 py-1 text-[11px] font-medium text-black/70 dark:text-white/80 rounded-full border border-black/10 dark:border-white/10 bg-black/[0.03] dark:bg-white/[0.03] hover:bg-black/[0.06] dark:hover:bg-white/[0.06] transition-all duration-300 max-w-[200px] cursor-pointer"
             >
               <div className="flex-shrink-0 w-5 h-5 rounded-full bg-black/10 dark:bg-white/10 flex items-center justify-center">
                 <User size={10} className="text-black/60 dark:text-white/60" />
@@ -119,7 +119,7 @@ export function Navbar() {
               <span className="truncate pr-1">{user.email}</span>
             </Link>
           ) : (
-            <Link href="/login" className="hidden sm:flex px-4 py-1.5 text-[11px] font-medium uppercase tracking-widest text-black dark:text-white/80 rounded-lg border border-transparent transition-all duration-200 hover:bg-black/[0.06] dark:hover:bg-white/[0.08] hover:border-black/10 dark:hover:border-white/12 hover:text-black dark:hover:text-white cursor-pointer">
+            <Link href="/login" className="hidden xl:flex px-4 py-1.5 text-[11px] font-medium uppercase tracking-widest text-black dark:text-white/80 rounded-lg border border-transparent transition-all duration-200 hover:bg-black/[0.06] dark:hover:bg-white/[0.08] hover:border-black/10 dark:hover:border-white/12 hover:text-black dark:hover:text-white cursor-pointer">
               Sign In
             </Link>
           )}
@@ -127,7 +127,7 @@ export function Navbar() {
           {/* Hamburger Menu Toggle (Mobile Only) */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="flex md:hidden items-center justify-center w-9 h-9 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors text-black dark:text-white"
+            className="flex xl:hidden items-center justify-center w-9 h-9 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors text-black dark:text-white"
             aria-label="Toggle menu"
           >
             <AnimatePresence mode="wait">
@@ -165,7 +165,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0, height: "auto" }}
             exit={{ opacity: 0, y: -20, height: 0 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }} // smooth spring-like ease
-            className="absolute top-full left-0 w-full overflow-hidden border-b border-black/[0.06] dark:border-white/[0.06] bg-white dark:bg-[#050505] shadow-2xl md:hidden z-40"
+            className="absolute top-full left-0 w-full overflow-hidden border-b border-black/[0.06] dark:border-white/[0.06] bg-white dark:bg-[#050505] shadow-2xl xl:hidden z-40"
           >
             <div className="flex flex-col p-6 space-y-6 max-h-[80vh] overflow-y-auto">
               <nav className="flex flex-col space-y-4">
