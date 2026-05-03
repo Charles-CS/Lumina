@@ -504,9 +504,9 @@ export function FreeformOverlay({
       case "Text": return <span style={style} className={"font-medium drop-shadow-sm"}>{p.text || "Your Text Here"}</span>;
       case "Button": return <button style={{ ...style, backgroundColor: accent, borderRadius: r }} className={"px-5 py-2.5 transition font-medium shadow-md w-full h-full"}>{p.label || "Click Me"}</button>;
       case "Image": {
-        const isMobileSmartFit = viewMode === "mobile" && !p.width;
-        const imageWidth = isMobileSmartFit ? "100%" : Math.max(24, Number(p.width ?? p.size ?? 128));
-        const imageHeight = isMobileSmartFit ? "auto" : Math.max(24, Number(p.height ?? p.size ?? 128));
+        const isSmartFit = viewMode !== "desktop" && !p.width;
+        const imageWidth = isSmartFit ? "100%" : Math.max(24, Number(p.width ?? p.size ?? 128));
+        const imageHeight = isSmartFit ? "auto" : Math.max(24, Number(p.height ?? p.size ?? 128));
         const imageOpacity = Math.min(Math.max(Number(p.opacity ?? 100), 0), 100) / 100;
         const borderWeight = Math.max(0, Number(p.borderWeight ?? 0));
         const borderStyle = String(p.borderStyle || "solid");
@@ -516,10 +516,11 @@ export function FreeformOverlay({
           <div
             className={"bg-neutral-800 flex items-center justify-center overflow-hidden"}
             style={{
-              width: isMobileSmartFit ? "100%" : `${imageWidth}px`,
-              height: isMobileSmartFit ? "auto" : `${imageHeight}px`,
-              minHeight: isMobileSmartFit ? "80px" : undefined,
-              aspectRatio: isMobileSmartFit ? "16 / 9" : undefined,
+              width: isSmartFit ? "100%" : `${imageWidth}px`,
+              height: isSmartFit ? "auto" : `${imageHeight}px`,
+              maxWidth: "100%",
+              minHeight: isSmartFit ? "80px" : undefined,
+              aspectRatio: isSmartFit ? "16 / 9" : (p.width && p.height ? `${p.width} / ${p.height}` : undefined),
               backgroundColor: bgColor,
               opacity: imageOpacity,
               borderWidth: borderWeight,
@@ -529,7 +530,7 @@ export function FreeformOverlay({
               borderRadius: r,
             }}
           >
-            {p.src ? <img src={p.src} alt={""} className={"w-full h-full object-cover"} /> : <span style={{ ...style, opacity: 0.3 }}>Image Area</span>}
+            {p.src ? <img src={p.src} alt={""} className={`w-full ${isSmartFit ? "h-auto" : "h-full"} object-cover`} /> : <span style={{ ...style, opacity: 0.3 }}>Image Area</span>}
           </div>
         );
       }
@@ -958,8 +959,8 @@ export function FreeformOverlay({
                   const h = p.height !== undefined ? Number(p.height) : 64;
                   return { width: "100%", height: h, minHeight: 64, maxWidth: "100%" } as React.CSSProperties;
                 }
-                // Smart Fit: full-width images on mobile when no explicit width set
-                if (element.type === "Image" && viewMode === "mobile" && !p.width) {
+                // Smart Fit: full-width images on non-desktop views when no explicit width set
+                if (element.type === "Image" && viewMode !== "desktop" && !p.width) {
                   return { width: "100%", height: "auto", maxWidth: "100%" } as React.CSSProperties;
                 }
                 // Inline-ish elements that size themselves don't need explicit container dimensions
