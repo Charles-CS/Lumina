@@ -12,6 +12,10 @@ interface TemplateModalProps {
     badge: string;
     views: number;
     description?: string;
+    author?: {
+      name: string;
+      avatar: string;
+    };
   } | null;
   isOpen: boolean;
   onClose: () => void;
@@ -65,10 +69,18 @@ export function TemplateModal({ template, isOpen, onClose }: TemplateModalProps)
               </button>
 
               <div className="flex-1 overflow-y-auto pr-2 mt-4 custom-scrollbar relative z-10">
-                <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center justify-between mb-4">
                   <span className="px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 text-[10px] font-bold uppercase tracking-widest border border-indigo-500/20">
                     Showcase
                   </span>
+                  {template.author && (
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 rounded-full overflow-hidden border border-white/10 bg-white/5">
+                        <img src={template.author.avatar} alt={template.author.name} className="w-full h-full object-cover" />
+                      </div>
+                      <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">{template.author.name}</span>
+                    </div>
+                  )}
                 </div>
                 <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-tight tracking-tight">{template.title}</h2>
                 <p className="text-base text-white/60 mb-10 leading-relaxed font-light">
