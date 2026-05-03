@@ -449,7 +449,7 @@ export default function PublishPage() {
           <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-violet-600/[0.08] rounded-full blur-[90px] pointer-events-none" />
 
           {/* ── CENTER: Identity & Code Engine ─────────────────────────── */}
-          <div className="w-[55%] flex flex-col border-r border-white/[0.05] relative z-10 overflow-y-auto thin-scrollbar">
+          <div className="w-[55%] flex flex-col border-r border-white/[0.05] relative z-10 overflow-hidden thin-scrollbar">
 
             {/* Checklist Header */}
             <div className={`px-8 py-3 border-b flex items-center gap-3 transition-all duration-500 flex-shrink-0 ${
@@ -466,10 +466,10 @@ export default function PublishPage() {
             </div>
 
             {/* Identity Section */}
-            <div className="p-8 pb-4 flex-shrink-0">
-              <h2 className="text-xl font-bold tracking-tight text-white/90 mb-4">Website Identity &amp; Profile</h2>
+            <div className="px-8 py-4 flex-shrink-0">
+              <h2 className="text-lg font-bold tracking-tight text-white/90 mb-3">Website Identity &amp; Profile</h2>
 
-              <div className="space-y-5">
+              <div className="space-y-4">
                 {/* Website Name */}
                 <div className="relative group">
                   <input
@@ -477,7 +477,7 @@ export default function PublishPage() {
                     id="websiteName"
                     value={siteMeta.title}
                     onChange={(e) => setSiteMeta({ title: e.target.value })}
-                    className="peer w-full bg-black/40 border border-white/10 rounded-xl px-4 py-4 pt-7 text-white text-sm focus:outline-none focus:border-violet-500/60 focus:ring-1 focus:ring-violet-500/25 transition-all placeholder-transparent shadow-inner"
+                    className="peer w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 pt-6 text-white text-sm focus:outline-none focus:border-violet-500/60 focus:ring-1 focus:ring-violet-500/25 transition-all placeholder-transparent shadow-inner"
                     placeholder="Website Name"
                   />
                   <label
@@ -536,7 +536,7 @@ export default function PublishPage() {
                       value={siteMeta.description}
                       onChange={(e) => setSiteMeta({ description: e.target.value })}
                       rows={3}
-                      className="peer w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 pt-7 text-white text-sm focus:outline-none focus:border-violet-500/60 focus:ring-1 focus:ring-violet-500/25 transition-all placeholder-transparent shadow-inner resize-none thin-scrollbar"
+                      className="peer w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2 pt-6 text-white text-sm focus:outline-none focus:border-violet-500/60 focus:ring-1 focus:ring-violet-500/25 transition-all placeholder-transparent shadow-inner resize-none thin-scrollbar"
                       placeholder="Meta Description"
                     />
                     <label
@@ -551,7 +551,7 @@ export default function PublishPage() {
             </div>
 
             {/* Code Engine */}
-            <div className="px-8 pb-8 flex flex-col flex-1 min-h-0">
+            <div className="px-8 pb-6 flex flex-col flex-1 min-h-0">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-7 h-7 rounded-lg bg-white/[0.04] border border-white/10 flex items-center justify-center">
                   <FileCode2 size={13} className="text-white/50" />
@@ -560,7 +560,7 @@ export default function PublishPage() {
               </div>
 
               {/* Code window */}
-              <div className="flex-1 rounded-2xl border border-white/[0.07] bg-[#040406] flex flex-col overflow-hidden shadow-inner min-h-[220px]">
+              <div className="flex-1 rounded-2xl border border-white/[0.07] bg-[#040406] flex flex-col overflow-hidden shadow-inner min-h-[160px]">
                 {/* Tabs */}
                 <div className="flex px-2 pt-2 gap-0.5 border-b border-white/5 bg-black/30 flex-shrink-0">
                   {(["html", "css", "react"] as const).map((tab) => (
@@ -624,7 +624,7 @@ export default function PublishPage() {
           </div>
 
           {/* ── RIGHT: Deploy & Hosting ─────────────────────────────────── */}
-          <div className="w-[45%] flex flex-col relative z-10 p-8 overflow-y-auto thin-scrollbar">
+          <div className="w-[45%] flex flex-col relative z-10 p-8 overflow-hidden thin-scrollbar">
 
             {/* Header */}
             <div className="flex items-center gap-5 mb-10 flex-shrink-0">
