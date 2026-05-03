@@ -737,7 +737,7 @@ export default function Dashboard() {
     return () => window.removeEventListener('tutorial-action', handleTutorialAction);
   }, []);
 
-  const [isSavedTemplatesOpen, setIsSavedTemplatesOpen] = useState(false);
+  const [isSavedTemplatesOpen, setIsSavedTemplatesOpen] = useState(true);
   const [localImages, setLocalImages] = useState<LocalImageItem[]>([]);
   const [savedTemplates, setSavedTemplates] = useState<LibraryItem[]>([]);
   const pointerPosRef = useRef<{ x: number; y: number } | null>(null);
