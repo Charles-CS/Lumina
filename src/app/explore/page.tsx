@@ -8,6 +8,7 @@ import Link from "next/link";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Sparkles, Zap, Layers, Code2, Cpu, Globe, Palette, Monitor, Type, Box, ChevronRight, ArrowUpRight, X, Eye, SquareStack } from "lucide-react";
+import { TemplateModal } from "@/components/ui/TemplateModal";
 
 // --- Sub-components to adhere to Rules of Hooks ---
 
@@ -575,110 +576,15 @@ function LuminaDiscoverySection() {
         </div>
       </div>
 
-      {/* Modal - Same style as Assets page */}
-      {typeof window !== "undefined" && createPortal(
-        <AnimatePresence>
-          {selectedTemplate && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-xl"
-              onClick={closeModal}
-            >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.98, y: 12 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.98, y: 12 }}
-                transition={{ duration: 0.18, ease: "easeOut" }}
-                onClick={e => e.stopPropagation()}
-                className="relative flex flex-col md:flex-row w-max max-w-[95vw] h-max max-h-[90vh] rounded-2xl shadow-[0_0_80px_rgba(0,0,0,0.6)] overflow-hidden bg-[#0d0d0d] border border-white/10"
-              >
-                {/* Left: Image Preview */}
-                <div className="flex shrink items-center justify-center min-w-0 bg-black/20 p-4 md:p-0">
-                  <img
-                    src={selectedTemplate.image}
-                    alt={selectedTemplate.title}
-                    className="object-contain block"
-                    style={{
-                      maxWidth: "calc(95vw - 420px)",
-                      maxHeight: "90vh"
-                    }}
-                  />
-                </div>
-
-                {/* Right: Info Panel */}
-                <div className="w-[420px] max-w-full flex-shrink-0 flex flex-col justify-between bg-transparent p-8 text-white custom-scrollbar border-l border-white/5">
-                  <button
-                    onClick={closeModal}
-                    className="absolute top-6 right-6 flex h-10 w-10 items-center justify-center rounded-full text-white hover:bg-white/10 transition-colors z-10"
-                  >
-                    <X size={20} />
-                  </button>
-
-                  <div className="flex-1 overflow-y-auto pr-2 mt-2 custom-scrollbar">
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className="px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 text-[10px] font-bold uppercase tracking-widest border border-indigo-500/20">
-                        {selectedTemplate.tag}
-                      </span>
-                    </div>
-                    <h2 className="text-3xl font-bold mb-4 leading-tight">{selectedTemplate.title}</h2>
-                    <p className="text-base text-white/60 mb-8 leading-relaxed font-light">
-                      {selectedTemplate.desc}
-                    </p>
-
-                    {/* Template Actions */}
-                    <div className="flex flex-col gap-4 mb-8">
-                      <button 
-                        disabled
-                        className="flex items-center justify-between w-full px-5 py-4 rounded-xl bg-white text-black font-bold text-sm cursor-not-allowed opacity-80 group"
-                      >
-                        Use Template
-                        <ArrowRight size={16} className="opacity-40" />
-                      </button>
-                      <button 
-                        disabled
-                        className="flex items-center justify-center w-full px-5 py-4 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-sm cursor-not-allowed opacity-50"
-                      >
-                        Preview Demo
-                      </button>
-                    </div>
-
-                    {/* Metadata Section */}
-                    <div className="space-y-6">
-                      <div className="flex flex-col gap-2">
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Technologies Used</span>
-                        <div className="flex flex-wrap gap-2">
-                          {["Next.js 15", "React 19", "Tailwind 4", "Framer Motion"].map(tech => (
-                            <span key={tech} className="px-3 py-1 rounded-lg bg-white/5 border border-white/5 text-[11px] font-medium text-white/60">{tech}</span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Bottom Metadata Bar */}
-                  <div className="flex items-center text-[11px] opacity-70 mt-6 pt-4 border-t border-white/10 space-x-5 whitespace-nowrap">
-                    <span className="flex items-center space-x-2">
-                      <Eye className="w-3.5 h-3.5 opacity-70" />
-                      <span className="font-medium">1,240 Views</span>
-                    </span>
-                    <span className="flex items-center space-x-2">
-                      <SquareStack className="w-3.5 h-3.5 opacity-70" />
-                      <span className="font-medium">Responsive Design</span>
-                    </span>
-                    <span className="flex items-center space-x-2">
-                      <Box className="w-3.5 h-3.5 opacity-70" />
-                      <span className="font-medium">v1.2.0</span>
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>,
-        document.body
-      )}
+      <TemplateModal 
+        template={selectedTemplate ? {
+          ...selectedTemplate,
+          badge: selectedTemplate.tag,
+          views: 1240, // Static for now as in the explore data
+        } : null}
+        isOpen={!!selectedTemplate}
+        onClose={closeModal}
+      />
     </section>
   );
 }

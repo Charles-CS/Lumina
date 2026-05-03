@@ -9,35 +9,35 @@ const roadmapItems = [
     status: "completed",
     title: "Lumina Core Engine V1",
     description: "Successfully launched the initial release of our high-performance visual builder core. Features include drag-and-drop support, theme switching, and real-time preview.",
-    date: "Q4 2025",
+    date: "Q4 2026",
     details: ["Canvas rendering engine", "Basic layout components", "Global styling tokens", "Next.js 14 Integration"]
   },
   {
     status: "in-progress",
     title: "AI Component Generator",
     description: "Harness the power of AI to build your entire UI. Just describe what you want, and Lumina will generate production-ready code with Tailwind styling.",
-    date: "Q1 2026",
+    date: "Q1 2027",
     details: ["Text-to-UI component generation", "AI-driven design suggestions", "Natural language styling adjustments"]
   },
   {
     status: "upcoming",
     title: "Advanced Animation Studio",
     description: "Create complex Framer Motion animations through a simple visual timeline interface. No more manually calculating spring values.",
-    date: "Q2 2026",
+    date: "Q2 2027",
     details: ["Timeline-based animation editor", "Scroll-linked trigger library", "Custom ease-function presets"]
   },
   {
     status: "upcoming",
     title: "Team Collaboration & CMS",
     description: "Launch of Lumina Cloud for Teams. Real-time multiplayer editing, version control, and a built-in headless CMS for dynamic content.",
-    date: "Q3 2026",
+    date: "Q3 2027",
     details: ["Real-time collaborative editing", "Built-in Lumina CMS", "Enterprise-grade versioning", "Asset Library management"]
   },
   {
     status: "upcoming",
     title: "The Marketplace",
     description: "A community-driven marketplace for templates, custom components, and design assets built by Lumina creators.",
-    date: "Q4 2026",
+    date: "Q4 2027",
     details: ["Template selling/sharing", "Component community library", "One-click asset importing"]
   },
 ];

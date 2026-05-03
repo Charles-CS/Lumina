@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Sun, Moon, Monitor, Menu, X } from "lucide-react";
+import { Sun, Moon, Monitor, Menu, X, User } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
@@ -109,8 +109,14 @@ export function Navbar() {
 
           {/* Sign In / Profile */}
           {user ? (
-            <Link href="/profile" className="hidden sm:flex items-center gap-2 px-4 py-1.5 text-[11px] font-medium tracking-tight text-black/80 dark:text-white/90 rounded-xl border border-black/10 dark:border-white/10 bg-black/[0.04] dark:bg-white/[0.04] hover:bg-black/[0.08] dark:hover:bg-white/[0.08] hover:border-black/20 dark:hover:border-white/20 transition-all duration-300 cursor-pointer truncate max-w-[150px]">
-              {user.email}
+            <Link 
+              href="/profile" 
+              className="hidden sm:flex items-center gap-2 px-2.5 py-1 text-[11px] font-medium text-black/70 dark:text-white/80 rounded-full border border-black/10 dark:border-white/10 bg-black/[0.03] dark:bg-white/[0.03] hover:bg-black/[0.06] dark:hover:bg-white/[0.06] transition-all duration-300 max-w-[200px] cursor-pointer"
+            >
+              <div className="flex-shrink-0 w-5 h-5 rounded-full bg-black/10 dark:bg-white/10 flex items-center justify-center">
+                <User size={10} className="text-black/60 dark:text-white/60" />
+              </div>
+              <span className="truncate pr-1">{user.email}</span>
             </Link>
           ) : (
             <Link href="/login" className="hidden sm:flex px-4 py-1.5 text-[11px] font-medium uppercase tracking-widest text-black dark:text-white/80 rounded-lg border border-transparent transition-all duration-200 hover:bg-black/[0.06] dark:hover:bg-white/[0.08] hover:border-black/10 dark:hover:border-white/12 hover:text-black dark:hover:text-white cursor-pointer">
